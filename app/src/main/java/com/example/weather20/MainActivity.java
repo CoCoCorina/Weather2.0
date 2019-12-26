@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -26,19 +27,20 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView time_1, time_2, time_3, time_4, time_5, time_6,
+    TextView time_1, time_2, time_3, time_4, time_5, time_6,time_7,
             Date_1, Date_2, Date_3, Date_4, Date_5, Date_6, Date_7,
             Temperature_1, Temperature_2, Temperature_3, Temperature_4, Temperature_5, Temperature_6, Temperature_7,
             Weather_1, Weather_2, Weather_3, Weather_4, Weather_5, Weather_6, Weather_7,
             Direction_1, Direction_2, Direction_3, Direction_4, Direction_5, Direction_6, Direction_7,
-            Power_1, Power_2, Power_3, Power_4, Power_5, Power_6, Power_7;
+            Power_1, Power_2, Power_3, Power_4, Power_5, Power_6, Power_7, Warn_content;
     JSONObject object_now,
-            forecast7_0, forecast7_1, forecast7_2, forecast7_3, forecast7_4, forecast7_5, forecast7_6,
+            forecast7_0, forecast7_1, forecast7_2, forecast7_3, forecast7_4, forecast7_5, forecast7_6, warn,
             temperature_0_object, temperature_1_object, temperature_2_object, temperature_3_object, temperature_4_object, temperature_5_object, temperature_6_object;
-
     private Intent intent;
     private ImageButton StartBtn = null;
     private ImageButton StopBtn = null;
+    private StringBuilder respond;
+    private String string = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,41 +53,38 @@ public class MainActivity extends AppCompatActivity {
         time_4 = findViewById(R.id.day_4);
         time_5 = findViewById(R.id.day_5);
         time_6 = findViewById(R.id.day_6);
-        Date_1 = findViewById(R.id.date_1);
+        time_7 = findViewById(R.id.day_7);
         Date_2 = findViewById(R.id.date_2);
         Date_3 = findViewById(R.id.date_3);
         Date_4 = findViewById(R.id.date_4);
         Date_5 = findViewById(R.id.date_5);
         Date_6 = findViewById(R.id.date_6);
         Date_7 = findViewById(R.id.date_7);
-        Temperature_1 = findViewById(R.id.temperature_1);
         Temperature_2 = findViewById(R.id.temperature_2);
         Temperature_3 = findViewById(R.id.temperature_3);
         Temperature_4 = findViewById(R.id.temperature_4);
         Temperature_5 = findViewById(R.id.temperature_5);
         Temperature_6 = findViewById(R.id.temperature_6);
         Temperature_7 = findViewById(R.id.temperature_7);
-        Weather_1 = findViewById(R.id.weather_1);
         Weather_2 = findViewById(R.id.weather_2);
         Weather_3 = findViewById(R.id.weather_3);
         Weather_4 = findViewById(R.id.weather_4);
         Weather_5 = findViewById(R.id.weather_5);
         Weather_6 = findViewById(R.id.weather_6);
         Weather_7 = findViewById(R.id.weather_7);
-        Direction_1 = findViewById(R.id.direction_1);
         Direction_2 = findViewById(R.id.direction_2);
         Direction_3 = findViewById(R.id.direction_3);
         Direction_4 = findViewById(R.id.direction_4);
         Direction_5 = findViewById(R.id.direction_5);
         Direction_6 = findViewById(R.id.direction_6);
         Direction_7 = findViewById(R.id.direction_7);
-        Power_1 = findViewById(R.id.power_1);
         Power_2 = findViewById(R.id.power_2);
         Power_3 = findViewById(R.id.power_3);
         Power_4 = findViewById(R.id.power_4);
         Power_5 = findViewById(R.id.power_5);
         Power_6 = findViewById(R.id.power_6);
         Power_7 = findViewById(R.id.power_7);
+        Warn_content = findViewById(R.id.warn_content);
         StartBtn = (ImageButton) findViewById(R.id.StartBtn);
         StopBtn = (ImageButton) findViewById(R.id.StopBtn);
 
@@ -111,25 +110,25 @@ public class MainActivity extends AppCompatActivity {
 
     //获取JSON
     @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
+    private final Handler handler = new Handler() {
 
         @SuppressLint({"SetTextI18n", "ShowToast"})
-        public void handleMessage(android.os.Message msg) {
+        public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 0:
                     break;
                 case 1:
                     try {
                         //实时数据
-                        time_1.setText(object_now.getString("now_rain"));
-                        time_2.setText(object_now.getString("now_feelst"));
-                        time_3.setText(object_now.getString("now_humidity"));
-                        time_4.setText(object_now.getString("now_icomfort"));
-                        time_5.setText(object_now.getString("now_rcomfort"));
-                        time_6.setText(object_now.getString("now_wind_power"));
+                        time_1.setText("降水：" + object_now.getString("now_rain"));
+                        time_2.setText("温度：" + object_now.getString("now_feelst"));
+                        time_3.setText("空气湿度：" + object_now.getString("now_humidity"));
+                        time_4.setText("状态：" + object_now.getString("now_icomfort"));
+                        time_5.setText("空气污染：" + object_now.getString("now_rcomfort"));
+                        time_6.setText("风力：" + object_now.getString("now_wind_power"));
+                        time_7.setText("风向："+object_now.getString("now_wind_direction"));
 
                         //日期
-                        Date_1.setText(forecast7_0.getString("week"));
                         Date_2.setText(forecast7_1.getString("week"));
                         Date_3.setText(forecast7_2.getString("week"));
                         Date_4.setText(forecast7_3.getString("week"));
@@ -138,7 +137,39 @@ public class MainActivity extends AppCompatActivity {
                         Date_7.setText(forecast7_6.getString("week"));
 
                         //温度
+                        Temperature_2.setText(temperature_1_object.getString("temprature"));
+                        Temperature_3.setText(temperature_2_object.getString("temprature"));
+                        Temperature_4.setText(temperature_3_object.getString("temprature"));
+                        Temperature_5.setText(temperature_4_object.getString("temprature"));
+                        Temperature_6.setText(temperature_5_object.getString("temprature"));
+                        Temperature_7.setText(temperature_6_object.getString("temprature"));
 
+                        //天气情况
+                        Weather_2.setText(temperature_1_object.getString("weather"));
+                        Weather_3.setText(temperature_2_object.getString("weather"));
+                        Weather_4.setText(temperature_3_object.getString("weather"));
+                        Weather_5.setText(temperature_4_object.getString("weather"));
+                        Weather_6.setText(temperature_5_object.getString("weather"));
+                        Weather_7.setText(temperature_6_object.getString("weather"));
+
+                        //风向
+                        Direction_2.setText(temperature_1_object.getString("direction"));
+                        Direction_3.setText(temperature_2_object.getString("direction"));
+                        Direction_4.setText(temperature_3_object.getString("direction"));
+                        Direction_5.setText(temperature_4_object.getString("direction"));
+                        Direction_6.setText(temperature_5_object.getString("direction"));
+                        Direction_7.setText(temperature_6_object.getString("direction"));
+
+                        //风力
+                        Power_2.setText(temperature_1_object.getString("power"));
+                        Power_3.setText(temperature_2_object.getString("power"));
+                        Power_4.setText(temperature_3_object.getString("power"));
+                        Power_5.setText(temperature_4_object.getString("power"));
+                        Power_6.setText(temperature_5_object.getString("power"));
+                        Power_7.setText(temperature_6_object.getString("power"));
+
+                        //警告
+                        Warn_content.setText(warn.getString("content"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -203,13 +234,43 @@ public class MainActivity extends AppCompatActivity {
                     forecast7_4 = Data_Forecast7.getJSONObject(4);
                     forecast7_5 = Data_Forecast7.getJSONObject(5);
                     forecast7_6 = Data_Forecast7.getJSONObject(6);
-                    //获取温度
-                    String Forecast7_1_Object_String = forecast7_1.toString();
-                    JSONObject Forecast7_1_Object = new JSONObject(Forecast7_1_Object_String);
-                    JSONArray  Forecast7_Day_1_Array = Forecast7_1_Object.getJSONArray("");
-                    temperature_1_object = Forecast7_Day_1_Array.getJSONObject(0);
-                    String aaa = temperature_1_object.toString();
-                    Log.d("121312","1121"+aaa);
+
+                    //获取警告
+                    String forecast7_0_String = forecast7_0.toString();
+                    JSONObject forecast7_0_object = new JSONObject(forecast7_0_String);
+                    JSONArray forecast7_0_Worn = forecast7_0_object.getJSONArray("warn");
+                    warn = forecast7_0_Worn.getJSONObject(0);
+                    //获取天气情况
+                    String forecast7_1_String = forecast7_1.toString();
+                    JSONObject forecast7_1_object = new JSONObject(forecast7_1_String);
+                    JSONArray Forecast7_Day_1 = forecast7_1_object.getJSONArray("day");
+                    temperature_1_object = Forecast7_Day_1.getJSONObject(0);
+
+                    String forecast7_2_String = forecast7_2.toString();
+                    JSONObject forecast7_2_object = new JSONObject(forecast7_2_String);
+                    JSONArray Forecast7_Day_2 = forecast7_2_object.getJSONArray("day");
+                    temperature_2_object = Forecast7_Day_2.getJSONObject(0);
+
+                    String forecast7_3_String = forecast7_3.toString();
+                    JSONObject forecast7_3_object = new JSONObject(forecast7_3_String);
+                    JSONArray Forecast7_Day_3 = forecast7_3_object.getJSONArray("day");
+                    temperature_3_object = Forecast7_Day_3.getJSONObject(0);
+
+                    String forecast7_4_String = forecast7_4.toString();
+                    JSONObject forecast7_4_object = new JSONObject(forecast7_4_String);
+                    JSONArray Forecast7_Day_4 = forecast7_4_object.getJSONArray("day");
+                    temperature_4_object = Forecast7_Day_4.getJSONObject(0);
+
+                    String forecast7_5_String = forecast7_5.toString();
+                    JSONObject forecast7_5_object = new JSONObject(forecast7_5_String);
+                    JSONArray Forecast7_Day_5 = forecast7_5_object.getJSONArray("day");
+                    temperature_5_object = Forecast7_Day_5.getJSONObject(0);
+
+                    String forecast7_6_String = forecast7_6.toString();
+                    JSONObject forecast7_6_object = new JSONObject(forecast7_6_String);
+                    JSONArray Forecast7_Day_6 = forecast7_6_object.getJSONArray("day");
+                    temperature_6_object = Forecast7_Day_6.getJSONObject(0);
+
 
                     handler.sendEmptyMessage(1);
                 } catch (Exception e) {
@@ -219,7 +280,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 
     /**
      * 背景音乐
