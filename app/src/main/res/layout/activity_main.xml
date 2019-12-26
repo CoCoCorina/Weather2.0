@@ -35,20 +35,20 @@
             android:textColor="#111"
             android:textSize="20sp" />
 
-
-
         <TextView
             android:id="@+id/day_6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#111"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/day_7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#111"
             android:textSize="20sp" />
+
         <TextView
             android:id="@+id/day_3"
             android:layout_width="wrap_content"
