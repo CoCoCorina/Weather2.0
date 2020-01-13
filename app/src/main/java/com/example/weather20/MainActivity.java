@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         Power_7.setText(temperature_6_object.getString("power"));
 
                         //警告
-                        Warn_content.setText(warn.getString("content"));
+//                        Warn_content.setText(warn.getString("content"));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -236,10 +236,10 @@ public class MainActivity extends AppCompatActivity {
                     forecast7_6 = Data_Forecast7.getJSONObject(6);
 
                     //获取警告
-                    String forecast7_0_String = forecast7_0.toString();
-                    JSONObject forecast7_0_object = new JSONObject(forecast7_0_String);
-                    JSONArray forecast7_0_Worn = forecast7_0_object.getJSONArray("warn");
-                    warn = forecast7_0_Worn.getJSONObject(0);
+//                    String forecast7_0_String = forecast7_0.toString();
+//                    JSONObject forecast7_0_object = new JSONObject(forecast7_0_String);
+//                    JSONArray forecast7_0_Worn = forecast7_0_object.getJSONArray("warn");
+//                    warn = forecast7_0_Worn.getJSONObject(0);
                     //获取天气情况
                     String forecast7_1_String = forecast7_1.toString();
                     JSONObject forecast7_1_object = new JSONObject(forecast7_1_String);
